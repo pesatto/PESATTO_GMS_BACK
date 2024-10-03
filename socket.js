@@ -5,7 +5,7 @@ const util = require('util')
 const { units } = require("./db/units")
 const clients = new Map();
 const command = require("./db/commands")
-
+const mongose = require("./db/connection")
 const server = net.createServer()
 
 server.on("connection", (socket) => {
@@ -55,9 +55,10 @@ server.on("connection", (socket) => {
     })
 })
 
-server.listen(8251, '0.0.0.0', () => {
+server.listen(8251, '0.0.0.0', async () => {
     console.log("Listening")
-    units.updateMany({}, { $set: { connected: false } }).then(r => console.log("All Genset Reset"))
+    await mongose.connected
+    await units.updateMany({}, { $set: { connected: false } }).then(r => console.log("All Genset Reset"))
 });
 
 command.watch().on('change', (newData) => {
