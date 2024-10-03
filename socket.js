@@ -5,7 +5,6 @@ const util = require('util')
 const { units } = require("./db/units")
 const clients = new Map();
 const command = require("./db/commands")
-const mongose = require("./db/connection")
 const server = net.createServer()
 
 server.on("connection", (socket) => {
