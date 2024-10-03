@@ -12,6 +12,7 @@ const { units } = require("./db/units");
 const { Server } = require("socket.io");
 
 (async () => {
+  console.log("Starting App")
   try {
 
     await connectDB();
