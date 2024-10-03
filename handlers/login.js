@@ -6,8 +6,8 @@ module.exports = (data, socket) => {
         "result":
         {
             "register": 1,
-            "historic": "34.125.42.24:8251",
-            "liveData": "34.125.42.24:8251",
+            "historic": "38.194.224.218:8251",
+            "liveData": "38.194.224.218:8251",
             "realTime": Date.now(),
             "para_command": "01010000004EBC3E;01030000002D85D7;0103002E000AA5C4",
             "con_command": "01010000004EBC3E;01030000002D85D7;0103002E000AA5C4",
