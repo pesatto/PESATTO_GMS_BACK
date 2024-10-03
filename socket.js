@@ -54,10 +54,9 @@ server.on("connection", (socket) => {
     })
 })
 
-server.listen(8251, '0.0.0.0', async () => {
+server.listen(8251, '0.0.0.0', () => {
     console.log("Listening")
-    await mongose.connected
-    await units.updateMany({}, { $set: { connected: false } }).then(r => console.log("All Genset Reset"))
+    units.updateMany({}, { $set: { connected: false } }).then(r => console.log("All Genset Reset"))
 });
 
 command.watch().on('change', (newData) => {
