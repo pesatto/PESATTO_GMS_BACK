@@ -15,6 +15,4 @@ const historicsSchema = new mongoose.Schema({
     }
 });
 
-const HistoricsHistory = mongoose.model('historics', historicsSchema);
-
-module.exports = { HistoricsHistory };
+module.exports = mongoose.model('historics', historicsSchema);

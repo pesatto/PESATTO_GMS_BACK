@@ -1,5 +1,5 @@
 const db = require("../db/units")
-const {HistoricsHistory} = require("../db/historic")
+const histo = require("../db/historic")
 const util = require('util');
 const logger = require("../logger");
 
@@ -53,12 +53,12 @@ module.exports = (data, socket) => {
                             for (const c of binFile) {
                                 //actual.realvalues[key] = value;
                                 actual.realbooleans[startIndex] = c;
-                                if (startIndex in (0,1,2)) {
+                                if (startIndex in (0, 1, 2)) {
                                     alarm = True
                                 }
                                 startIndex += 1
 
-                                
+
                             }
 
                         }
@@ -67,18 +67,15 @@ module.exports = (data, socket) => {
 
 
             }
-            
+
             if (alarm) {
-                const alarmHistory = new HistoricsHistory({
+                histo.create({
                     unit: actual._id, // Reference the unit's ID
                     packetNum: params.packetNum,
                     realvalues: actual.realvalues, // Save the current realvalues snapshot
                     realbooleans: actual.realbooleans, // Save the current realbooleans snapshot
                     alarmTriggered, // Which boolean triggered the alarm
-                });
-
-                alarmHistory.save(); // Save the historical record
-                logger.info("New Record in saved for unit " + actual.hostid)
+                }).then(data => logger.info("New Historic in saved for unit " + actual.hostid)).catch(e => logger.error("Error on historic", e))
             }
 
             actual.connected = true
