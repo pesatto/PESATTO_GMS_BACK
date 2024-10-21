@@ -68,14 +68,13 @@ module.exports = (data, socket) => {
 
             }
 
-            if (alarm == true) {
+            if (alarm) {
                 logger.info("Validating Historic")
                 let hi = {
                     unit: actual._id, // Reference the unit's ID
                     packetNum: params.packetNum,
                     realvalues: actual.realvalues, // Save the current realvalues snapshot
                     realbooleans: actual.realbooleans, // Save the current realbooleans snapshot
-                    alarmTriggered, // Which boolean triggered the alarm
                 }
                 logger.info(hi)
                 logger.info("Validating Historic END")
