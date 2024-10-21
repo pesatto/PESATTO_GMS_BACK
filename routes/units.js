@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const models = require("../db/models")
 const {units} = require("../db/units")
-const {histo} = require("../db/historic")
+const histo = require("../db/historic")
 const commands = require('../db/commands')
 /* GET home page. */
 
