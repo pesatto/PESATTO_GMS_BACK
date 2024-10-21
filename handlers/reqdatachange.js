@@ -69,6 +69,7 @@ module.exports = (data, socket) => {
             }
 
             if (alarm) {
+                logger.info(params['packetNum'])
                 let hi = {
                     unit: actual._id, // Reference the unit's ID
                     packetNum: params['packetNum'],
