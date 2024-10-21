@@ -33,7 +33,7 @@ router.post("/command/set", (req, res, next) => {
   }
 })
 router.get("/historic/:unitid", (req,res,next) => {
-  HistoricsHistory.find({_id: req.params.unitid}).then((data) => res.json({error: false, data: data[0]})).catch(e => res.json({error: true, message: e.message}))
+  HistoricsHistory.find({_id: req.params.unitid}).then((data) => res.json({error: false, data: data})).catch(e => res.json({error: true, message: e.message}))
 })
 
 router.get("/:unitid", (req,res,next) => {
