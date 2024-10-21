@@ -15,7 +15,7 @@ server.on("connection", (socket) => {
     socket.on("data", (data) => {
         try {
             let info = JSON.parse(data.toString())
-            logger.info(info)
+            logger.info(JSON.stringify(info))
             handleLogin(socket, info.hostid)
 
             switch (info.method) {
