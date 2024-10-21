@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const logger = require("../logger")
 
 const users = new mongoose.Schema({
     fullname: {
@@ -53,9 +54,9 @@ users.pre('updateOne', async function (next) {
             delete update.userpassword
             const hashedPassword = await bcrypt.hash(update.$set.userpassword, salt);
             update.$set.userpassword = hashedPassword;
-            console.log(update)
+            logger.info(update)
         } catch (err) {
-            console.log(err)
+            logger.error(err)
             return next(err);
         }
     }

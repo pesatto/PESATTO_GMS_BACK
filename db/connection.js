@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
+const logger = require('../logger'); // Import the logger
 
 const connectDB = async () => {
   try {
     await mongoose.connect('mongodb://127.0.0.1/pesatto_gms', { directConnection:true, tls: "false", ssl: "false", replicaSet: 'rs0' });
-    console.log('MongoDB connected successfully');
+    logger.info('MongoDB connected successfully');
   } catch (err) {
-    console.error('Error connecting to MongoDB:', err.message);
+    logger.error('Error connecting to MongoDB:', err.message);
     process.exit(1); // Exit process with failure
   }
 };

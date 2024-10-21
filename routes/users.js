@@ -5,7 +5,7 @@ const companies = require("../db/companies")
 const jwt = require("jsonwebtoken");
 const secretKey = "+iPZslzvZ$tyr+9v";
 const secured = require("./util")
-
+const logger = require("../logger")
 
 /* GET users listing. */
 router.get('', secured, function (req, res, next) {
@@ -49,7 +49,7 @@ router.post("/auth", (req, res, next) => {
             let token = jwt.sign({ data: JSON.stringify(user) }, secretKey, { expiresIn: '10d' });
             res.json({ error: false, data: user, token: token })
           } catch (e) {
-            console.log(e)
+            logger.error("Error on userjs", e)
             res.json({ error: true, message: "Their was an error generating the token, try again" })
           }
         } else {

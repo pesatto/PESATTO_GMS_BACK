@@ -6,6 +6,7 @@ const { units } = require("./db/units")
 const clients = new Map();
 const command = require("./db/commands")
 const server = net.createServer()
+const logger = require('./logger'); // Import the logger
 
 server.on("connection", (socket) => {
     socket.setKeepAlive(true)
@@ -14,7 +15,7 @@ server.on("connection", (socket) => {
     socket.on("data", (data) => {
         try {
             let info = JSON.parse(data.toString())
-            console.log(info)
+            logger.info(info)
             handleLogin(socket, info.hostid)
 
             switch (info.method) {
@@ -28,15 +29,14 @@ server.on("connection", (socket) => {
                     socket.write(JSON.stringify({ "method": "LongCon", "message": "OK", "retcode": "000000" }))
                     break;
                 default:
-                    console.log("Default")
-                    console.log(util.inspect(info, false, null, true /* enable colors */))
+                    logger.info("Method Default", info)
                     socket.write(JSON.stringify({ "method": info.method, "message": "OK", "retcode": "000000" }))
                     break;
             }
 
         }
         catch (e) {
-            console.log("Error parsing socket data", e)
+            logger.error("Error parsing socket data", e)
         }
     })
 
@@ -49,14 +49,14 @@ server.on("connection", (socket) => {
     })
 
     socket.on('error', (err) => {
-        console.log('Socket error:', err)
+        logger.error('Socket error:', err)
         handleLogout()
     })
 })
 
 server.listen(8251, '0.0.0.0', () => {
-    console.log("Listening")
-    units.updateMany({}, { $set: { connected: false } }).then(r => console.log("All Genset Reset"))
+    logger.info("Socket Listening")
+    units.updateMany({}, { $set: { connected: false } }).then(r => logger.info("All Genset Reset"))
 });
 
 command.watch().on('change', (newData) => {
@@ -76,7 +76,7 @@ command.watch().on('change', (newData) => {
                 if (client && !client.destroyed) {
                     client.write(JSON.stringify(generated), (err) => {
                         if (err) {
-                            console.log("Error Sending Command" + err)
+                            logger.error("Error Sending Command" + err)
                             units.updateOne({ hostid: document.hostid }, { $set: { connected: false } }).exec()
                         }
                     })

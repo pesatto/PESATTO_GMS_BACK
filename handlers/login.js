@@ -1,6 +1,7 @@
 const db = require("../db/units")
+const logger = require("../logger")
 module.exports = (data, socket) => {
-    console.log("Logged Correctly")
+    logger.info("Unit " + data.hostid + " Auth Correctly")
     socket.write(JSON.stringify({
         "method": "login",
         "result":

@@ -1,5 +1,4 @@
 const express = require('express');
-const logger = require('morgan');
 const bodyParser = require('body-parser');
 const connectDB = require("./db/connection")
 const cors = require('cors')
@@ -7,23 +6,26 @@ const secured = require("./routes/util")
 const indexRouter = require('./routes/units');
 const userRouter = require('./routes/users');
 
+const logger = require('./logger'); // Import the logger
+
+
 const { units } = require("./db/units");
 
 const { Server } = require("socket.io");
 
 (async () => {
-  console.log("Starting App")
+  logger.info("Starting App")
   try {
 
     await connectDB();
-    console.log("Connected to Mongo")
+    logger.info("Connected to MongoDB")
 
     require("./socket")
 
     process.env.TZ = "America/Mexico_City";
 
     const app = express();
-    app.use(logger('dev'));
+    app.use(logger);
     app.use(express.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(cors())
@@ -71,12 +73,12 @@ const { Server } = require("socket.io");
 
 
     units.watch().on('change', (change) => {
-      console.log("Change on id " + change.documentKey._id)
+      logger.info("Change on id " + change.documentKey._id)
       io.to("PESROOM" + change.documentKey._id).emit("update", { _id: change.documentKey._id, data: change.updateDescription.updatedFields })
     })
 
   } catch (error) {
-    console.error('Failed to start the server:', error);
+    logger.error("Failted to start the server:", error)
     process.exit(1);
   }
 })();
