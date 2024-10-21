@@ -24,7 +24,7 @@ module.exports = (data, socket) => {
     params = data.params
     db.units.findOne({ hostid: data.hostid }).then(actual => {
         if (actual) {
-            let alarm = False
+            let alarm = True
 
             if (params['longitude']) {
                 actual.latitude = params.latitude
