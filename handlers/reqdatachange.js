@@ -24,7 +24,7 @@ module.exports = (data, socket) => {
     params = data.params
     db.units.findOne({ hostid: data.hostid }).then(actual => {
         if (actual) {
-            let alarm = True
+            let alarm = true
 
             if (params['longitude']) {
                 actual.latitude = params.latitude
@@ -68,7 +68,8 @@ module.exports = (data, socket) => {
 
             }
 
-            if (alarm) {
+            if (alarm == true) {
+                logger.info("Validating Historic")
                 histo.create({
                     unit: actual._id, // Reference the unit's ID
                     packetNum: params.packetNum,
