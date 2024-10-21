@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const models = require("../db/models")
 const {units} = require("../db/units")
-const {HistoricsHistory} = require("../db/historic")
+const {histo} = require("../db/historic")
 const commands = require('../db/commands')
 /* GET home page. */
 
@@ -33,7 +33,7 @@ router.post("/command/set", (req, res, next) => {
   }
 })
 router.get("/historic/:unitid", (req,res,next) => {
-  HistoricsHistory.find({_id: req.params.unitid}).then((data) => res.json({error: false, data: data})).catch(e => res.json({error: true, message: e.message}))
+  histo.find({_id: req.params.unitid}).then((data) => res.json({error: false, data: data})).catch(e => res.json({error: true, message: e.message}))
 })
 
 router.get("/:unitid", (req,res,next) => {
