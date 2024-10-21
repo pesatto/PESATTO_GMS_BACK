@@ -69,10 +69,9 @@ module.exports = (data, socket) => {
             }
 
             if (alarm) {
-                logger.info(JSON.stringify(params))
                 let hi = {
                     unit: actual._id, // Reference the unit's ID
-                    packetNum: params['packetNum'],
+                    packetNum: params['packetnum'],
                     realvalues: actual.realvalues, // Save the current realvalues snapshot
                     realbooleans: actual.realbooleans, // Save the current realbooleans snapshotg
                 }
