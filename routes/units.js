@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const models = require("../db/models")
 const {units} = require("../db/units")
+const {HistoricsHistory} = require("../db/historic")
 const commands = require('../db/commands')
 /* GET home page. */
 
@@ -31,10 +32,14 @@ router.post("/command/set", (req, res, next) => {
     res.status(200).json({error: true, message: "This User cannot send commands"})
   }
 })
+router.get("/historic/:unitid", (req,res,next) => {
+  HistoricsHistory.find({_id: req.params.unitid}).then((data) => res.json({error: false, data: data[0]})).catch(e => res.json({error: true, message: e.message}))
+})
 
 router.get("/:unitid", (req,res,next) => {
   units.find({_id: req.params.unitid}).populate("model").then((data) => res.json({error: false, data: data[0]})).catch(e => res.json({error: true, message: e.message}))
 })
+
 
 
 router.post("", (req,res,next) => {
