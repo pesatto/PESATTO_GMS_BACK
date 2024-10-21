@@ -78,6 +78,7 @@ module.exports = (data, socket) => {
                     alarmTriggered, // Which boolean triggered the alarm
                 }
                 logger.info(hi)
+                logger.info("Validating Historic END")
                 histo.create(hi).then(res => logger.info("New Historic in saved for unit " + actual.hostid + res)).catch(e => logger.error("Error on historic", e))
             }
 
