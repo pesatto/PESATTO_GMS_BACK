@@ -25,7 +25,19 @@ const { Server } = require("socket.io");
     process.env.TZ = "America/Mexico_City";
 
     const app = express();
-    app.use(logger);
+    app.use((req, res, next) => {
+      const { method, url } = req;
+      const start = Date.now();
+
+      // When the response finishes, log the time taken and status code
+      res.on('finish', () => {
+        const duration = Date.now() - start;
+        const statusCode = res.statusCode;
+        logger.info(`${method} ${url} ${statusCode} - ${duration}ms`);
+      });
+
+      next();
+    });
     app.use(express.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(cors())
