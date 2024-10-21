@@ -54,7 +54,8 @@ users.pre('updateOne', async function (next) {
             delete update.userpassword
             const hashedPassword = await bcrypt.hash(update.$set.userpassword, salt);
             update.$set.userpassword = hashedPassword;
-            logger.info(update)
+
+            logger.info(JSON.stringify(update))
         } catch (err) {
             logger.error(err)
             return next(err);
