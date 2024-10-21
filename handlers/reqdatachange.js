@@ -1,5 +1,6 @@
 const db = require("../db/units")
-const util = require('util')
+const util = require('util');
+const logger = require("../logger");
 
 const convertParams = (hexArray) => {
     const convertedObject = {};
@@ -64,13 +65,13 @@ module.exports = (data, socket) => {
 
     try {
 
-        console.log(socket.destroyed)
+        logger.info("Socket Status Not Connected:" + socket.destroyed)
         if (socket.destroyed == false) {
             socket.write(JSON.stringify({ "method": "reqdata", "message": "OK", "retcode": "000000" }))
         }
 
     } catch (e) {
-        console.log("Error Trying to Send " + e)
+        logger.error("Error Trying to Send " + e)
     }
 
 }
