@@ -1,4 +1,5 @@
 const db = require("../db/units")
+const {HistoricsHistory} = require("../db/historic")
 const util = require('util');
 const logger = require("../logger");
 
@@ -23,6 +24,8 @@ module.exports = (data, socket) => {
     params = data.params
     db.units.findOne({ hostid: data.hostid }).then(actual => {
         if (actual) {
+            let alarm = False
+
             if (params['longitude']) {
                 actual.latitude = params.latitude
                 actual.longitude = params.longitude
@@ -50,13 +53,34 @@ module.exports = (data, socket) => {
                             for (const c of binFile) {
                                 //actual.realvalues[key] = value;
                                 actual.realbooleans[startIndex] = c;
+                                if (startIndex in (0,1,2)) {
+                                    alarm = True
+                                }
                                 startIndex += 1
+
+                                
                             }
 
                         }
                     }
                 })
+
+
             }
+            
+            if (alarm) {
+                const alarmHistory = new HistoricsHistory({
+                    unit: actual._id, // Reference the unit's ID
+                    packetNum: params.packetNum,
+                    realvalues: actual.realvalues, // Save the current realvalues snapshot
+                    realbooleans: actual.realbooleans, // Save the current realbooleans snapshot
+                    alarmTriggered, // Which boolean triggered the alarm
+                });
+
+                alarmHistory.save(); // Save the historical record
+                logger.info("New Record in saved for unit " + actual.hostid)
+            }
+
             actual.connected = true
             db.units.updateOne({ hostid: data.hostid }, { $set: actual }).exec()
         }
