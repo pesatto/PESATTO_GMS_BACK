@@ -77,7 +77,7 @@ module.exports = (data, socket) => {
                     realbooleans: actual.realbooleans, // Save the current realbooleans snapshotg
                 }
                 logger.info("Validating Historic END")
-                histo.create(hi).then(res => logger.info("New Historic in saved for unit " + actual.hostid + res)).catch(e => logger.error("Error on historic", e))
+                histo.create(hi).then(res => logger.info("New Historic in saved for unit " + actual.hostid)).catch(e => logger.error("Error on historic", e))
             }
 
             actual.connected = true
