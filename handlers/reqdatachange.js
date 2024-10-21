@@ -69,14 +69,12 @@ module.exports = (data, socket) => {
             }
 
             if (alarm) {
-                logger.info("Validating Historic")
                 let hi = {
                     unit: actual._id, // Reference the unit's ID
-                    packetNum: params.packetNum,
+                    packetNum: params['packetNum'],
                     realvalues: actual.realvalues, // Save the current realvalues snapshot
                     realbooleans: actual.realbooleans, // Save the current realbooleans snapshotg
                 }
-                logger.info("Validating Historic END")
                 histo.create(hi).then(res => logger.info("New Historic in saved for unit " + actual.hostid)).catch(e => logger.error("Error on historic", e))
             }
 
