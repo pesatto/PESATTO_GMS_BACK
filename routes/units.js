@@ -32,9 +32,31 @@ router.post("/command/set", (req, res, next) => {
     res.status(200).json({error: true, message: "This User cannot send commands"})
   }
 })
-router.get("/historic/:unitid", (req,res,next) => {
-  histo.find({unit: req.params.unitid}).lean().then((data) => res.json({error: false, data: data})).catch(e => res.json({error: true, message: e.message}))
-})
+router.get("/historic/:unitid", (req, res, next) => {
+  const cursor = histo.find({ unit: req.params.unitid }).lean().cursor();
+  
+  res.setHeader('Content-Type', 'application/json');
+  res.write('{"error": false, "data": [');
+
+  let first = true;
+  
+  cursor.on('data', (doc) => {
+    if (!first) {
+      res.write(',');
+    }
+    res.write(JSON.stringify(doc));
+    first = false;
+  });
+
+  cursor.on('end', () => {
+    res.write(']}');
+    res.end();
+  });
+
+  cursor.on('error', (err) => {
+    res.status(500).json({ error: true, message: err.message });
+  });
+});
 
 router.get("/:unitid", (req,res,next) => {
   units.find({_id: req.params.unitid}).populate("model").then((data) => res.json({error: false, data: data[0]})).catch(e => res.json({error: true, message: e.message}))
