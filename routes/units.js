@@ -47,7 +47,6 @@ router.get("/historic/:unitid/:date", (req, res, next) => {
     }
   }).lean().cursor();
 
-  res.setHeader('Content-Type', 'application/json');
   res.write('{"error": false, "data": [');
 
   let first = true;
