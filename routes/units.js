@@ -39,34 +39,20 @@ router.get("/historic/:unitid/:date", (req, res, next) => {
   const startOfDay = new Date(day.setHours(0, 0, 0, 0));
   const endOfDay = new Date(day.setHours(23, 59, 59, 999));
 
-  const cursor = histo.find({
+  histo.find({
     unit: req.params.unitid,
     createdAt: {
       $gte: startOfDay,
       $lt: endOfDay
     }
-  }).lean().cursor();
+  }).then(data => {
+    res.json({
+      data: data,
+      error: false
+    })
+  })
 
-  res.write('{"error": false, "data": [');
 
-  let first = true;
-
-  cursor.on('data', (doc) => {
-    if (!first) {
-      res.write(',');
-    }
-    res.write(JSON.stringify(doc));
-    first = false;
-  });
-
-  cursor.on('end', () => {
-    res.write(']}');
-    res.end();
-  });
-
-  cursor.on('error', (err) => {
-    res.status(500).json({ error: true, message: err.message });
-  });
 });
 router.get("/:unitid", (req, res, next) => {
   units.find({ _id: req.params.unitid }).populate("model").then((data) => res.json({ error: false, data: data[0] })).catch(e => res.json({ error: true, message: e.message }))
