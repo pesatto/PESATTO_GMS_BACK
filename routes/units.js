@@ -4,6 +4,8 @@ const models = require("../db/models")
 const { units } = require("../db/units")
 const histo = require("../db/historic")
 const commands = require('../db/commands')
+const moment = require('moment');
+
 /* GET home page. */
 
 router.get("/models", (req, res, next) => {
@@ -33,12 +35,12 @@ router.post("/command/set", (req, res, next) => {
   }
 })
 router.get("/historic/:unitid/:date", (req, res, next) => {
-  const day = new Date(req.params.date); // Replace with your specific day
+  const day = moment(req.params.date, 'DD-MM-YYYY').toDate();
   const startOfDay = new Date(day.setHours(0, 0, 0, 0));
   const endOfDay = new Date(day.setHours(23, 59, 59, 999));
+
   const cursor = histo.find({
-    unit:
-      req.params.unitid,
+    unit: req.params.unitid,
     createdAt: {
       $gte: startOfDay,
       $lt: endOfDay
@@ -67,7 +69,6 @@ router.get("/historic/:unitid/:date", (req, res, next) => {
     res.status(500).json({ error: true, message: err.message });
   });
 });
-
 router.get("/:unitid", (req, res, next) => {
   units.find({ _id: req.params.unitid }).populate("model").then((data) => res.json({ error: false, data: data[0] })).catch(e => res.json({ error: true, message: e.message }))
 })
