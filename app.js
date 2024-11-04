@@ -40,7 +40,11 @@ const { Server } = require("socket.io");
     });
     app.use(express.urlencoded({ extended: false }));
     app.use(bodyParser.json());
-    app.use(cors())
+    app.use(cors({
+      origin: '*', 
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
+      allowedHeaders: ['Content-Type', 'Authorization']
+    }))
 
     app.use("/users", userRouter)
     app.use('/units', secured, indexRouter);
