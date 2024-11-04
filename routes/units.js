@@ -32,8 +32,8 @@ router.post("/command/set", (req, res, next) => {
     res.status(200).json({error: true, message: "This User cannot send commands"})
   }
 })
-router.get("/historic/:unitid", (req, res, next) => {
-  const cursor = histo.find({ unit: req.params.unitid }).lean().cursor();
+router.get("/historic/:unitid/:date", (req, res, next) => {
+  const cursor = histo.find({ unit: req.params.unitid, createdAt: req.params.date}).lean().cursor();
   
   res.setHeader('Content-Type', 'application/json');
   res.write('{"error": false, "data": [');
