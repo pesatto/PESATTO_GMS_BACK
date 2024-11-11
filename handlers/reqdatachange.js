@@ -54,7 +54,7 @@ module.exports = (data, socket) => {
                                 //actual.realvalues[key] = value;
                                 actual.realbooleans[startIndex] = c;
                                 if ([0, 1, 2].includes(startIndex)) {
-                                    alarm = True
+                                    alarm = true
                                 }
                                 startIndex += 1
 
