@@ -53,7 +53,7 @@ module.exports = (data, socket) => {
                             for (const c of binFile) {
                                 //actual.realvalues[key] = value;
                                 actual.realbooleans[startIndex] = c;
-                                if (startIndex in (0, 1, 2)) {
+                                if ([0, 1, 2].includes(startIndex)) {
                                     alarm = True
                                 }
                                 startIndex += 1
